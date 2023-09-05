@@ -77,8 +77,7 @@ async def get_user(event):
             if isinstance(probable_user_mention_entity,
                           MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user
+                return await event.client(GetFullUserRequest(user_id))
         try:
             user_object = await event.client.get_entity(user)
             replied_user = await event.client(
@@ -123,8 +122,7 @@ async def fetch_info(replied_user, event):
         "\u2060", "") if first_name else ("Tidak Ada Nama Depan")
     last_name = last_name.replace(
         "\u2060", "") if last_name else ("Tidak Ada Nama Belakang")
-    username = "@{}".format(username) if username else (
-        "Tidak Menggunakan Username")
+    username = f"@{username}" if username else "Tidak Menggunakan Username"
     user_bio = "Tidak Punya Bio" if not user_bio else user_bio
 
     caption = "<b>INFORMASI PENGGUNA:</b>\n\n"
@@ -139,7 +137,7 @@ async def fetch_info(replied_user, event):
     caption += f"ID: <code>{user_id}</code>\n\n"
     caption += f"Bio: \n<code>{user_bio}</code>\n\n"
     caption += f"Obrolan Umum Dengan Pengguna Ini: {common_chat}\n"
-    caption += f"Link Permanen Ke Profil: "
+    caption += "Link Permanen Ke Profil: "
     caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
 
     return photo, caption
